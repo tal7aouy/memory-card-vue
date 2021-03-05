@@ -11,13 +11,12 @@
        @select-card="flipCard"
         />
   </section>
-  <!-- <h2>{{ userSelection }}</h2> -->
-  <p>{{status}}</p>
+  <h2>{{status}}</h2>
 
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import Card from './components/Card.vue'
 export default {
@@ -29,10 +28,24 @@ export default {
     // declaration part
     const cardList = ref([])
     const userSelection = ref([])
-    const status =ref('')
+    const status = computed(() =>{
+      if(remainingPairs.value === 0){
+        return "Palyer wins!"
+      }else{
+        return `Remaining Pairs: ${remainingPairs.value}`
+      }
+    })
+
+  const remainingPairs = computed(()=>{
+    const remainingCards = cardList.value.filter(card => card.matched === false).length
+    return remainingCards / 2
+  })
+
+
+
     for(let i = 0;i<16;i++){
       cardList.value.push({
-        value: i,
+        value: 10,
         visible: false,
         position: i,
         matched: false
@@ -74,7 +87,8 @@ export default {
       cardList,
       flipCard,
       userSelection,
-      status
+      status,
+      remainingPairs
     }
   }
 
