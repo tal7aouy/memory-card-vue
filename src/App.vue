@@ -48,7 +48,7 @@ export default {
     }
     const status = computed(() =>{
       if(remainingPairs.value === 0){
-        return "Palyer wins!"
+        return "Player wins!"
       }else{
         return `Remaining Pairs: ${remainingPairs.value}`
       }
