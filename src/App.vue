@@ -1,24 +1,37 @@
 <template>
-    <h1>memory Game</h1>
-
-  <section class="board">
-       <Card v-for="(card,index) in cardList" 
-       :key="`card-${index}`" 
+<h1 class="title">Memory game</h1>
+<section class="info">
+  <p>welcome to Memory Card game!</p>
+  <p>Powered by Vue.js 3!</p>
+</section>
+  <transition-group tag="section" name="shuffle_card" class="board">
+       <Card v-for="card in cardList" 
+       :key="`card-${card.value}- ${card.variant}`" 
        :value="card.value"
        :visible="card.visible"
        :position="card.position"
        :matched="card.matched"
        @select-card="flipCard"
         />
-  </section>
+  </transition-group>
+
   <h2>{{status}}</h2>
-  <button @click="restartGame">Restart Game</button>
+  <div class="btns">
+    <button v-if="newPlayer" class="button" @click="restartGame">
+    <img src="/images/restart.svg" alt="">
+     Restart Game
+  </button>
+   <button v-else class="button" @click="startGame">
+    <img src="/images/play.svg" alt="">
+     Start Game
+  </button>
+  </div>
 </template>
 
 <script>
 import _ from 'lodash'
 import { computed, ref, watch } from 'vue'
-
+import { launchConfetti } from './utilities/confetti'
 import Card from './components/Card.vue'
 export default {
   name: "App",
@@ -29,6 +42,10 @@ export default {
     // declaration part
     const cardList = ref([])
     const userSelection = ref([])
+    const newPlayer = ref(true)
+    const startGame = () =>{
+      newPlayer.value = false
+    }
     const status = computed(() =>{
       if(remainingPairs.value === 0){
         return "Palyer wins!"
@@ -57,16 +74,18 @@ export default {
       }
     })
   }
-  const cardItems = [1, 2, 3, 4, 5, 6, 7, 8]
+  const cardItems = ['bat','candy','cauldron','cupcake','ghost','moon','pumpkin','witch-hat']
   cardItems.forEach(item => {
      cardList.value.push({
         value: item,
+        variant: 1,
         visible: false,
         position: null,
         matched: false
       })
       cardList.value.push({
         value: item,
+        variant: 2,
         visible: false,
         position: null,
         matched: false
@@ -96,7 +115,11 @@ export default {
          userSelection.value[0] = payload
       }
     }
-
+  watch(remainingPairs,currentValue=>{
+    if(currentValue === 0){
+      launchConfetti()
+    }
+  })
     watch(userSelection,currentValue => {
       if(currentValue.length === 2){
       const cardOne = currentValue[0]
@@ -124,7 +147,9 @@ export default {
       status,
       remainingPairs,
       shuffleCards,
-      restartGame
+      restartGame,
+      startGame,
+      newPlayer
     }
   }
 
@@ -132,16 +157,89 @@ export default {
 </script>
 
 <style>
-#app{
-  text-align: center;
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
+#app{
+  font-family: sans-serif;
+  color: #2c3e50;
+  text-align: center;
+  background: #0f2027; 
+  background: -webkit-linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364); 
+  background-size: cover;
+  color: #333;
+  padding-top:10px;
+  min-height: 100vh;
 
+}
+  h1 {
+  font-family: 'Lato', sans-serif;  font-size: 30px;
+  padding-block:30px;
+  text-align: center;
+  text-transform: uppercase;
+  text-rendering: optimizeLegibility;
+}
+h1.title {
+  color: #202020;
+  letter-spacing: 0.1em;
+  text-shadow: -1px -1px 1px #111, 2px 2px 1px #363636;
+}
+h2{
+  color:#fff;
+  font-family: 'Lato', sans-serif;
+}
 .board{
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px;
+  grid-template-columns: repeat(4,100px);
+  grid-template-rows: repeat(4,100px);
   grid-gap: 30px;
   justify-content: center;
+  padding-bottom: 30px;
 
 }
+
+.button{
+  background-color: lightsalmon;
+  border: none;
+  outline: none;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  transition: 0.5s ease-in-out;
+}
+.button:hover{
+  cursor: pointer;
+  background-color: rgb(185, 107, 76);
+  transform: scale(1.2);
+
+}
+.button img{
+  padding-right: 5px;
+}
+.shuffle_card-move {
+  transition: transform .8s ease-in;
+}
+.info p{
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  color:#fff;
+  font-size: 1rem;
+  font-weight: 600;
+
+}
+.info p:last-child{
+  margin-bottom: 30px;
+}
+
 </style>
