@@ -1,6 +1,6 @@
 # memory_game
 
-[play game from here link](https://memory-game-vuejs.netlify.app)
+[game here](https://memory-game-vuejs.netlify.app)
 
 
 ## Project setup
