@@ -1,6 +1,10 @@
 # memory_game
 
-[game here](https://memory-game-vuejs.netlify.app)
+i created this game for improve my skills and make something fun .
+
+it's a pure project maked by vuejs 3 & composition Api
+# Play From Here
+[game](https://memory-game-vuejs.netlify.app)
 
 
 ## Project setup
