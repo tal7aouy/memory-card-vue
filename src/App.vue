@@ -42,7 +42,7 @@ export default {
     const userSelection = ref([])
     const newPlayer = ref(true)
     const startGame = () => {
-      newPlayer.value = false
+      newPlayer.value = true
     }
     const status = computed(() => {
       if (remainingPairs.value === 0) {
@@ -63,6 +63,7 @@ export default {
       cardList.value = _.shuffle(cardList.value)
     }
     const restartGame = () => {
+      newPlayer.value = false
       shuffleCards()
       cardList.value = cardList.value.map((card, index) => {
         return {
