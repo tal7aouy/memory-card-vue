@@ -1,4 +1,4 @@
-# memory_game
+# Memory game
 
 Memory game is a game built for fun, using Vue.js 3 . The objective of Memory is to flip and match all the turned-down cards in as few moves as possible.
 
